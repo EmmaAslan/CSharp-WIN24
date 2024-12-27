@@ -1,45 +1,70 @@
-﻿namespace Business.Services;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using Business.Interfaces;
+using Business.Models;
 
-public class FileService
+namespace Business.Services;
+
+public class FileService : IFileService
 {
-    private string _directoryPath;
-    private string _filePath;
+    private readonly string _directoryPath;
+    private readonly string _filePath;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public FileService(string directoryPath = "Data", string fileName = "content.json")
+    public FileService(string directoryPath = "Data", string fileName = "contacts.json")
     {
         _directoryPath = directoryPath;
         _filePath = Path.Combine(_directoryPath, fileName);
+        _jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
     }
 
 
 
     #region Methods
 
-    public void SaveToFile(string content)
+    public bool SaveToFile(List<Contact> list)
     {
-        if (!Directory.Exists(_directoryPath))
-            Directory.CreateDirectory(_directoryPath);
-
-        using var sw = new StreamWriter(_filePath);
-        sw.WriteLine(content);
-    }
-
-    public string GetContentFromFile()
-    {
-        if (File.Exists(_filePath))
+        try
         {
-            using var sr = new StreamReader(_filePath);
-            string content = sr.ReadToEnd();
-            return content;
+            if (!Directory.Exists(_directoryPath))
+            {
+                Directory.CreateDirectory(_directoryPath);
+            }
+
+            var json = JsonSerializer.Serialize(list, _jsonSerializerOptions);
+
+            File.WriteAllText(_filePath, json);
+            return true;
         }
-
-        return null!;
-
-
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return false;
+        }
     }
 
 
+    public List<Contact> GetContentFromFile()
+    {
+        try
+        {
+            if (!File.Exists(_filePath))
+            {
+                return [];
+            }
 
-       #endregion
+            var json = File.ReadAllText(_filePath);
+            var list = JsonSerializer.Deserialize<List<Contact>>(json, _jsonSerializerOptions);
+
+            return list ?? [];
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return [];
+        }
+    }
+
+    #endregion
 
 }

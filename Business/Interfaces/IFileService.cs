@@ -1,7 +1,10 @@
-﻿namespace Business.Interfaces;
+﻿using Business.Models;
+
+namespace Business.Interfaces;
 
 public interface IFileService
 {
-    string GetContentFromFile();
-    void SaveToFile(string content);
+    List<Contact> GetContentFromFile();
+
+    bool SaveToFile(List<Contact> content);
 }

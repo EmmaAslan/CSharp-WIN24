@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Business.Interfaces;
+﻿using Business.Interfaces;
 using Business.Models;
 
 namespace Business.Services;
@@ -12,28 +11,25 @@ public class ContactService(IFileService fileService) : IContactService
 
     #region Methods
 
-
     public void CreateContact(Contact contact)
     {
         contact.Id = Guid.NewGuid().ToString();
         _contacts.Add(contact);
-        _fileService.SaveToFile(JsonSerializer.Serialize(_contacts));
-
-       
+        _fileService.SaveToFile(_contacts);
     }
 
     public IEnumerable<Contact> GetAllContacts()
     {
         try
         {
-            _contacts = JsonSerializer.Deserialize<List<Contact>>(_fileService.GetContentFromFile())!;
+            _contacts = _fileService.GetContentFromFile()!;
         }
         catch
         {
             _contacts = [];
         }
 
-           return _contacts;
+        return _contacts;
     }
 
 

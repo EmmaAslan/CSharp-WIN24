@@ -8,10 +8,10 @@ using Microsoft.Extensions.Hosting;
 var host = Host.CreateDefaultBuilder()
     .ConfigureServices(services =>
     {
-        services.AddSingleton<IFileService>(new FileService(fileName: "users.json"));
+        services.AddSingleton<IFileService, FileService>();
         services.AddSingleton<IContactService, ContactService>();
         services.AddSingleton<IMainMenuDialog, MainMenuDialog>();
-        
+
     })
     .Build();
 

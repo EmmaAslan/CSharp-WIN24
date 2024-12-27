@@ -1,6 +1,5 @@
 ﻿using Business.Interfaces;
 using Business.Models;
-using Business.Services;
 using MainApp.Interfaces;
 
 namespace MainApp.Dialogs;
@@ -46,20 +45,18 @@ public class MainMenuDialog(IContactService contactService) : IMainMenuDialog
 
         Console.Write("Enter Last Name: ");
         contact.LastName = Console.ReadLine()!;
-        
+
         Console.Write("Enter Email: ");
         contact.Email = Console.ReadLine()!;
-        
+
         Console.Write("Enter Phone Number: ");
-        //contact.Phone = Console.ReadLine();
-        contact.Phone = Convert.ToInt32(Console.ReadLine()!);
+        contact.Phone = Console.ReadLine()!;
 
         Console.Write("Enter Street Address: ");
         contact.StreetAddress = Console.ReadLine()!;
-        
-        Console.Write("Enter PostalCode: ");
-        //contact.PostalCode = Console.ReadLine();
-        contact.PostalCode = Convert.ToInt32(Console.ReadLine()!);
+
+        Console.Write("Enter Zip Code: ");
+        contact.ZipCode = Console.ReadLine()!;
 
         Console.Write("Enter City: ");
         contact.City = Console.ReadLine()!;
@@ -75,8 +72,8 @@ public class MainMenuDialog(IContactService contactService) : IMainMenuDialog
 
         foreach (var contact in _contactService.GetAllContacts())
         {
-            Console.WriteLine($"{contact.FirstName} {contact.LastName} \nEmail: {contact.Email} \nPhone Number: {contact.Phone}\nAddress: {contact.StreetAddress}{contact.PostalCode}{contact.City}");
-
+            Console.WriteLine($"Name: {contact.FirstName} {contact.LastName} \nEmail: {contact.Email} \nPhone Number: {contact.Phone}\nAddress: {contact.StreetAddress}, {contact.ZipCode} {contact.City}");
+            Console.WriteLine("\n-----------\n");
         }
 
         Console.WriteLine("Press any key to go back to Main Menu");
