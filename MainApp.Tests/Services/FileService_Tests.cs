@@ -124,7 +124,7 @@ public class FileService_Tests
 
     }
 
-
+    [Fact]
     public void GetContentFromFile_ShouldReturnEmptyList_IfNoDataInList()
     {
         // arrange
